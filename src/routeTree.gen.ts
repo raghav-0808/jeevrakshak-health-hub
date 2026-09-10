@@ -13,7 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ReportRouteImport } from './routes/report'
+import { Route as AuthenticatedAnimalsRouteImport } from './routes/_authenticated/animals'
+import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedCasesRouteImport } from './routes/_authenticated/cases'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as AuthenticatedAnimalsAnimalIdRouteImport } from './routes/_authenticated/animals.$animalId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,23 +39,59 @@ const ReportRoute = ReportRouteImport.update({
   path: '/report',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAnimalsRoute = AuthenticatedAnimalsRouteImport.update({
+  id: '/animals',
+  path: '/animals',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCasesRoute = AuthenticatedCasesRouteImport.update({
+  id: '/cases',
+  path: '/cases',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAnimalsAnimalIdRoute =
+  AuthenticatedAnimalsAnimalIdRouteImport.update({
+    id: '/$animalId',
+    path: '/$animalId',
+    getParentRoute: () => AuthenticatedAnimalsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
+  '/animals': typeof AuthenticatedAnimalsRouteWithChildren
+  '/assistant': typeof AuthenticatedAssistantRoute
+  '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/requests': typeof AuthenticatedRequestsRoute
+  '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
+  '/animals': typeof AuthenticatedAnimalsRouteWithChildren
+  '/assistant': typeof AuthenticatedAssistantRoute
+  '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/requests': typeof AuthenticatedRequestsRoute
+  '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -58,20 +99,48 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
+  '/_authenticated/animals': typeof AuthenticatedAnimalsRouteWithChildren
+  '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/cases': typeof AuthenticatedCasesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/_authenticated/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/report' | '/dashboard'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/report'
+    | '/animals'
+    | '/assistant'
+    | '/cases'
+    | '/dashboard'
+    | '/requests'
+    | '/animals/$animalId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/report' | '/dashboard'
+  to:
+    | '/'
+    | '/auth'
+    | '/report'
+    | '/animals'
+    | '/assistant'
+    | '/cases'
+    | '/dashboard'
+    | '/requests'
+    | '/animals/$animalId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/report'
+    | '/_authenticated/animals'
+    | '/_authenticated/assistant'
+    | '/_authenticated/cases'
     | '/_authenticated/dashboard'
+    | '/_authenticated/requests'
+    | '/_authenticated/animals/$animalId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -111,6 +180,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/animals': {
+      id: '/_authenticated/animals'
+      path: '/animals'
+      fullPath: '/animals'
+      preLoaderRoute: typeof AuthenticatedAnimalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/assistant': {
+      id: '/_authenticated/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof AuthenticatedAssistantRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/cases': {
+      id: '/_authenticated/cases'
+      path: '/cases'
+      fullPath: '/cases'
+      preLoaderRoute: typeof AuthenticatedCasesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -118,15 +208,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/requests': {
+      id: '/_authenticated/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthenticatedRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/animals/$animalId': {
+      id: '/_authenticated/animals/$animalId'
+      path: '/$animalId'
+      fullPath: '/animals/$animalId'
+      preLoaderRoute: typeof AuthenticatedAnimalsAnimalIdRouteImport
+      parentRoute: typeof AuthenticatedAnimalsRoute
+    }
   }
 }
 
+interface AuthenticatedAnimalsRouteChildren {
+  AuthenticatedAnimalsAnimalIdRoute: typeof AuthenticatedAnimalsAnimalIdRoute
+}
+
+const AuthenticatedAnimalsRouteChildren: AuthenticatedAnimalsRouteChildren = {
+  AuthenticatedAnimalsAnimalIdRoute: AuthenticatedAnimalsAnimalIdRoute,
+}
+
+const AuthenticatedAnimalsRouteWithChildren =
+  AuthenticatedAnimalsRoute._addFileChildren(AuthenticatedAnimalsRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnimalsRoute: typeof AuthenticatedAnimalsRouteWithChildren
+  AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedCasesRoute: typeof AuthenticatedCasesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnimalsRoute: AuthenticatedAnimalsRouteWithChildren,
+  AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedCasesRoute: AuthenticatedCasesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
