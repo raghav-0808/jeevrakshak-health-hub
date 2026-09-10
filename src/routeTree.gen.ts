@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as AuthenticatedAnimalsRouteImport } from './routes/_authenticated/animals'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedAnimalsAnimalIdRouteImport } from './routes/_authenticated/animals.$animalId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,20 +46,28 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAnimalsAnimalIdRoute =
+  AuthenticatedAnimalsAnimalIdRouteImport.update({
+    id: '/$animalId',
+    path: '/$animalId',
+    getParentRoute: () => AuthenticatedAnimalsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
-  '/animals': typeof AuthenticatedAnimalsRoute
+  '/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
-  '/animals': typeof AuthenticatedAnimalsRoute
+  '/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -66,14 +75,17 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/report': typeof ReportRoute
-  '/_authenticated/animals': typeof AuthenticatedAnimalsRoute
+  '/_authenticated/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/report' | '/animals' | '/dashboard'
+  fullPaths:
+    '/' | '/auth' | '/report' | '/animals' | '/dashboard' | '/animals/$animalId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/report' | '/animals' | '/dashboard'
+  to:
+    '/' | '/auth' | '/report' | '/animals' | '/dashboard' | '/animals/$animalId'
   id:
     | '__root__'
     | '/'
@@ -82,6 +94,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/_authenticated/animals'
     | '/_authenticated/dashboard'
+    | '/_authenticated/animals/$animalId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -135,16 +148,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/animals/$animalId': {
+      id: '/_authenticated/animals/$animalId'
+      path: '/$animalId'
+      fullPath: '/animals/$animalId'
+      preLoaderRoute: typeof AuthenticatedAnimalsAnimalIdRouteImport
+      parentRoute: typeof AuthenticatedAnimalsRoute
+    }
   }
 }
 
+interface AuthenticatedAnimalsRouteChildren {
+  AuthenticatedAnimalsAnimalIdRoute: typeof AuthenticatedAnimalsAnimalIdRoute
+}
+
+const AuthenticatedAnimalsRouteChildren: AuthenticatedAnimalsRouteChildren = {
+  AuthenticatedAnimalsAnimalIdRoute: AuthenticatedAnimalsAnimalIdRoute,
+}
+
+const AuthenticatedAnimalsRouteWithChildren =
+  AuthenticatedAnimalsRoute._addFileChildren(AuthenticatedAnimalsRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAnimalsRoute: typeof AuthenticatedAnimalsRoute
+  AuthenticatedAnimalsRoute: typeof AuthenticatedAnimalsRouteWithChildren
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAnimalsRoute: AuthenticatedAnimalsRoute,
+  AuthenticatedAnimalsRoute: AuthenticatedAnimalsRouteWithChildren,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
 }
 
