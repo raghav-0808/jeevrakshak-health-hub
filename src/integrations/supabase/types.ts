@@ -14,6 +14,198 @@ export type Database = {
   }
   public: {
     Tables: {
+      animals: {
+        Row: {
+          age_years: number | null
+          breed: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          owner_id: string
+          photo_url: string | null
+          sex: string | null
+          species: string
+          updated_at: string
+        }
+        Insert: {
+          age_years?: number | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          owner_id: string
+          photo_url?: string | null
+          sex?: string | null
+          species: string
+          updated_at?: string
+        }
+        Update: {
+          age_years?: number | null
+          breed?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          photo_url?: string | null
+          sex?: string | null
+          species?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      case_notes: {
+        Row: {
+          author_id: string
+          case_id: string
+          created_at: string
+          id: string
+          note: string
+        }
+        Insert: {
+          author_id: string
+          case_id: string
+          created_at?: string
+          id?: string
+          note: string
+        }
+        Update: {
+          author_id?: string
+          case_id?: string
+          created_at?: string
+          id?: string
+          note?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_notes_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cases: {
+        Row: {
+          address: string | null
+          ai_assessment: Json | null
+          animal_id: string | null
+          assigned_vet_id: string | null
+          created_at: string
+          description: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          photo_url: string | null
+          reporter_id: string | null
+          reporter_name: string | null
+          reporter_phone: string | null
+          species: string
+          status: Database["public"]["Enums"]["case_status"]
+          tracking_code: string
+          updated_at: string
+          urgency: string | null
+        }
+        Insert: {
+          address?: string | null
+          ai_assessment?: Json | null
+          animal_id?: string | null
+          assigned_vet_id?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          photo_url?: string | null
+          reporter_id?: string | null
+          reporter_name?: string | null
+          reporter_phone?: string | null
+          species: string
+          status?: Database["public"]["Enums"]["case_status"]
+          tracking_code: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Update: {
+          address?: string | null
+          ai_assessment?: Json | null
+          animal_id?: string | null
+          assigned_vet_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          photo_url?: string | null
+          reporter_id?: string | null
+          reporter_name?: string | null
+          reporter_phone?: string | null
+          species?: string
+          status?: Database["public"]["Enums"]["case_status"]
+          tracking_code?: string
+          updated_at?: string
+          urgency?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cases_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_records: {
+        Row: {
+          animal_id: string
+          created_at: string
+          diagnosis: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          record_date: string
+          title: string
+          treatment: string | null
+          vet_name: string | null
+        }
+        Insert: {
+          animal_id: string
+          created_at?: string
+          diagnosis?: string | null
+          id?: string
+          notes?: string | null
+          owner_id: string
+          record_date: string
+          title: string
+          treatment?: string | null
+          vet_name?: string | null
+        }
+        Update: {
+          animal_id?: string
+          created_at?: string
+          diagnosis?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          record_date?: string
+          title?: string
+          treatment?: string | null
+          vet_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_records_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -62,6 +254,47 @@ export type Database = {
         }
         Relationships: []
       }
+      vaccinations: {
+        Row: {
+          animal_id: string
+          created_at: string
+          given_on: string
+          id: string
+          next_due_on: string | null
+          notes: string | null
+          owner_id: string
+          vaccine: string
+        }
+        Insert: {
+          animal_id: string
+          created_at?: string
+          given_on: string
+          id?: string
+          next_due_on?: string | null
+          notes?: string | null
+          owner_id: string
+          vaccine: string
+        }
+        Update: {
+          animal_id?: string
+          created_at?: string
+          given_on?: string
+          id?: string
+          next_due_on?: string | null
+          notes?: string | null
+          owner_id?: string
+          vaccine?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaccinations_animal_id_fkey"
+            columns: ["animal_id"]
+            isOneToOne: false
+            referencedRelation: "animals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -77,6 +310,7 @@ export type Database = {
     }
     Enums: {
       app_role: "owner" | "vet"
+      case_status: "new" | "accepted" | "in_progress" | "resolved" | "closed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -205,6 +439,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["owner", "vet"],
+      case_status: ["new", "accepted", "in_progress", "resolved", "closed"],
     },
   },
 } as const
