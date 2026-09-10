@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ReportRouteImport } from './routes/report'
 import { Route as AuthenticatedAnimalsRouteImport } from './routes/_authenticated/animals'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedCasesRouteImport } from './routes/_authenticated/cases'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedAnimalsAnimalIdRouteImport } from './routes/_authenticated/animals.$animalId'
@@ -48,6 +49,11 @@ const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   path: '/assistant',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCasesRoute = AuthenticatedCasesRouteImport.update({
+  id: '/cases',
+  path: '/cases',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/report': typeof ReportRoute
   '/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/report': typeof ReportRoute
   '/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/report': typeof ReportRoute
   '/_authenticated/animals': typeof AuthenticatedAnimalsRouteWithChildren
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/cases': typeof AuthenticatedCasesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/animals'
     | '/assistant'
+    | '/cases'
     | '/dashboard'
     | '/requests'
     | '/animals/$animalId'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/animals'
     | '/assistant'
+    | '/cases'
     | '/dashboard'
     | '/requests'
     | '/animals/$animalId'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/report'
     | '/_authenticated/animals'
     | '/_authenticated/assistant'
+    | '/_authenticated/cases'
     | '/_authenticated/dashboard'
     | '/_authenticated/requests'
     | '/_authenticated/animals/$animalId'
@@ -182,6 +194,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAssistantRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/cases': {
+      id: '/_authenticated/cases'
+      path: '/cases'
+      fullPath: '/cases'
+      preLoaderRoute: typeof AuthenticatedCasesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -220,6 +239,7 @@ const AuthenticatedAnimalsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnimalsRoute: typeof AuthenticatedAnimalsRouteWithChildren
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedCasesRoute: typeof AuthenticatedCasesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
 }
@@ -227,6 +247,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnimalsRoute: AuthenticatedAnimalsRouteWithChildren,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedCasesRoute: AuthenticatedCasesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
 }
