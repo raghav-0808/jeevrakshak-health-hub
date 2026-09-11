@@ -1,8 +1,8 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { LogOut } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { Logo } from "@/components/Brand";
+import { Shell, Card } from "@/components/Shell";
+import { OWNER_NAV, VET_NAV } from "@/lib/nav";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -17,9 +17,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 function Dashboard() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
   const { data, isPending, error } = useQuery({
     queryKey: ["me"],
     queryFn: async () => {
@@ -39,83 +36,73 @@ function Dashboard() {
     },
   });
 
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/auth", search: { role: "owner" }, replace: true });
-  }
+  const sections = data?.role === "vet" ? vetSections : ownerSections;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="flex items-center justify-between px-5 py-5 sm:px-10">
-        <Logo />
-        <button
-          type="button"
-          onClick={signOut}
-          className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-[11px] font-extrabold tracking-[.12em] text-primary hover:bg-accent"
-        >
-          <LogOut className="h-4 w-4" />
-          SIGN OUT
-        </button>
-      </header>
+    <Shell nav={data?.role === "vet" ? VET_NAV : OWNER_NAV}>
+      {isPending && <p className="text-muted-foreground">Loading your workspace…</p>}
+      {error && (
+        <p className="rounded-xl bg-destructive/10 px-4 py-3 text-[14px] text-destructive">
+          We couldn't load your account details. Please refresh and try again.
+        </p>
+      )}
+      {data && (
+        <>
+          <div className="font-mono text-[10px] font-bold tracking-[.18em] text-gold">
+            {data.role === "vet" ? "CLINICAL DESK" : "OWNER WORKSPACE"}
+          </div>
+          <h1 className="mt-3 font-editorial text-5xl font-bold leading-tight tracking-[-.035em] text-primary">
+            {data.fullName ? `Welcome, ${data.fullName.split(" ")[0]}.` : "Welcome."}
+          </h1>
+          <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+            Signed in as {data.email}. Your animals, records and cases are saved to your account and stay
+            with you on every device.
+          </p>
 
-      <main className="paper-grid min-h-[calc(100vh-84px)] border-t border-border px-5 py-12 sm:px-10">
-        <div className="mx-auto max-w-6xl">
-          {isPending && <p className="text-muted-foreground">Loading your workspace…</p>}
-          {error && (
-            <p className="rounded-xl bg-destructive/10 px-4 py-3 text-[14px] text-destructive">
-              We couldn't load your account details. Please refresh and try again.
-            </p>
-          )}
-          {data && (
-            <>
-              <div className="font-mono text-[10px] font-bold tracking-[.18em] text-gold">
-                {data.role === "vet" ? "CLINICAL DESK" : "OWNER WORKSPACE"}
-              </div>
-              <h1 className="mt-3 font-editorial text-5xl font-bold leading-tight tracking-[-.035em] text-primary">
-                {data.fullName ? `Welcome, ${data.fullName.split(" ")[0]}.` : "Welcome."}
-              </h1>
-              <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
-                Signed in as {data.email}. Your account is saved, so your animals, records and cases
-                stay with you on every device.
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <Link
+                key={section.title}
+                to={section.to}
+                className="rounded-3xl border border-border bg-card p-7 transition hover:border-primary"
+              >
+                <h2 className="font-editorial text-[24px] font-bold tracking-[-.03em] text-primary">
+                  {section.title}
+                </h2>
+                <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">{section.body}</p>
+                <p className="mt-6 font-mono text-[10px] font-bold tracking-[.16em] text-gold">OPEN →</p>
+              </Link>
+            ))}
+          </div>
+
+          {data.role === "owner" && (
+            <Card className="mt-8">
+              <p className="text-[15px] leading-relaxed text-muted-foreground">
+                Anyone can report an injured street animal without an account through the public
+                <Link to="/report" className="mx-1 text-primary underline">
+                  Help an Animal
+                </Link>
+                page.
               </p>
-
-              <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {(data.role === "vet" ? vetSections : ownerSections).map((section) => (
-                  <div key={section.title} className="rounded-3xl border border-border bg-card p-7">
-                    <h2 className="font-editorial text-[24px] font-bold tracking-[-.03em] text-primary">
-                      {section.title}
-                    </h2>
-                    <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
-                      {section.body}
-                    </p>
-                    <p className="mt-6 font-mono text-[10px] font-bold tracking-[.16em] text-gold">
-                      BEING BUILT NEXT
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </>
+            </Card>
           )}
-        </div>
-      </main>
-    </div>
+        </>
+      )}
+    </Shell>
   );
 }
 
 const ownerSections = [
-  { title: "My Animals", body: "Add each animal with a photo, breed, age and health notes." },
-  { title: "Vaccinations", body: "Record vaccines given and the next due date for every animal." },
-  { title: "Medical Records", body: "Keep past treatments and veterinary notes in one history." },
-  { title: "AI Health Assistant", body: "Describe symptoms and share a photo for a preliminary read." },
-  { title: "Emergency Assistance", body: "Request a veterinarian and follow the case status live." },
-  { title: "Previous Requests", body: "Everything you have reported, with its current status." },
+  { title: "My Animals", body: "Add each animal with a photo, breed, age and health notes.", to: "/animals" },
+  { title: "Vaccinations & Records", body: "Vaccines given, next due dates and past treatments per animal.", to: "/animals" },
+  { title: "AI Health Assistant", body: "Describe symptoms and share a photo for a preliminary read.", to: "/assistant" },
+  { title: "Emergency Assistance", body: "Request a veterinarian and follow the case status live.", to: "/requests" },
+  { title: "Previous Requests", body: "Everything you have reported, with its current status.", to: "/requests" },
 ];
 
 const vetSections = [
-  { title: "Incoming Cases", body: "New animal reports arriving from owners and the public." },
-  { title: "Case Details", body: "Photos, symptoms, description and location for each report." },
-  { title: "Status Updates", body: "Accept, decline, and move a case through to resolved." },
-  { title: "Medical Notes", body: "Record treatment given and recommendations for the owner." },
+  { title: "Incoming Cases", body: "New animal reports arriving from owners and the public.", to: "/cases" },
+  { title: "Case Details", body: "Photos, symptoms, description and location for each report.", to: "/cases" },
+  { title: "Status Updates", body: "Accept, decline, and move a case through to resolved.", to: "/cases" },
+  { title: "Clinical Notes", body: "Record treatment given and recommendations for the owner.", to: "/cases" },
 ];
