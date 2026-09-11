@@ -17,7 +17,10 @@ import { Route as AuthenticatedAnimalsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
 import { Route as AuthenticatedCasesRouteImport } from './routes/_authenticated/cases'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedPortalRouteImport } from './routes/_authenticated/portal'
+import { Route as AuthenticatedRecordsRouteImport } from './routes/_authenticated/records'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as AuthenticatedVetPortalRouteImport } from './routes/_authenticated/vet-portal'
 import { Route as AuthenticatedAnimalsAnimalIdRouteImport } from './routes/_authenticated/animals.$animalId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,9 +62,24 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPortalRoute = AuthenticatedPortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecordsRoute = AuthenticatedRecordsRouteImport.update({
+  id: '/records',
+  path: '/records',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedVetPortalRoute = AuthenticatedVetPortalRouteImport.update({
+  id: '/vet-portal',
+  path: '/vet-portal',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAnimalsAnimalIdRoute =
@@ -79,7 +97,10 @@ export interface FileRoutesByFullPath {
   '/assistant': typeof AuthenticatedAssistantRoute
   '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/portal': typeof AuthenticatedPortalRoute
+  '/records': typeof AuthenticatedRecordsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/vet-portal': typeof AuthenticatedVetPortalRoute
   '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesByTo {
@@ -90,7 +111,10 @@ export interface FileRoutesByTo {
   '/assistant': typeof AuthenticatedAssistantRoute
   '/cases': typeof AuthenticatedCasesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/portal': typeof AuthenticatedPortalRoute
+  '/records': typeof AuthenticatedRecordsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/vet-portal': typeof AuthenticatedVetPortalRoute
   '/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRoutesById {
@@ -103,7 +127,10 @@ export interface FileRoutesById {
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
   '/_authenticated/cases': typeof AuthenticatedCasesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/portal': typeof AuthenticatedPortalRoute
+  '/_authenticated/records': typeof AuthenticatedRecordsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/_authenticated/vet-portal': typeof AuthenticatedVetPortalRoute
   '/_authenticated/animals/$animalId': typeof AuthenticatedAnimalsAnimalIdRoute
 }
 export interface FileRouteTypes {
@@ -116,7 +143,10 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/cases'
     | '/dashboard'
+    | '/portal'
+    | '/records'
     | '/requests'
+    | '/vet-portal'
     | '/animals/$animalId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -127,7 +157,10 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/cases'
     | '/dashboard'
+    | '/portal'
+    | '/records'
     | '/requests'
+    | '/vet-portal'
     | '/animals/$animalId'
   id:
     | '__root__'
@@ -139,7 +172,10 @@ export interface FileRouteTypes {
     | '/_authenticated/assistant'
     | '/_authenticated/cases'
     | '/_authenticated/dashboard'
+    | '/_authenticated/portal'
+    | '/_authenticated/records'
     | '/_authenticated/requests'
+    | '/_authenticated/vet-portal'
     | '/_authenticated/animals/$animalId'
   fileRoutesById: FileRoutesById
 }
@@ -208,11 +244,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/portal': {
+      id: '/_authenticated/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof AuthenticatedPortalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/records': {
+      id: '/_authenticated/records'
+      path: '/records'
+      fullPath: '/records'
+      preLoaderRoute: typeof AuthenticatedRecordsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/requests': {
       id: '/_authenticated/requests'
       path: '/requests'
       fullPath: '/requests'
       preLoaderRoute: typeof AuthenticatedRequestsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vet-portal': {
+      id: '/_authenticated/vet-portal'
+      path: '/vet-portal'
+      fullPath: '/vet-portal'
+      preLoaderRoute: typeof AuthenticatedVetPortalRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/animals/$animalId': {
@@ -241,7 +298,10 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
   AuthenticatedCasesRoute: typeof AuthenticatedCasesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedPortalRoute: typeof AuthenticatedPortalRoute
+  AuthenticatedRecordsRoute: typeof AuthenticatedRecordsRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
+  AuthenticatedVetPortalRoute: typeof AuthenticatedVetPortalRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -249,7 +309,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
   AuthenticatedCasesRoute: AuthenticatedCasesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedPortalRoute: AuthenticatedPortalRoute,
+  AuthenticatedRecordsRoute: AuthenticatedRecordsRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
+  AuthenticatedVetPortalRoute: AuthenticatedVetPortalRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
