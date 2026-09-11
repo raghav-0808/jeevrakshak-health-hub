@@ -65,7 +65,7 @@ async function createCase(data: ReportInputType, reporterId: string | null) {
         longitude: data.longitude ?? null,
         address: data.address ?? null,
         urgency: assessment?.urgency ?? null,
-        ai_assessment: assessment,
+        ai_assessment: (assessment ?? null) as unknown as Record<string, unknown> | null,
       })
       .select("id")
       .single();

@@ -82,9 +82,11 @@ function CasesPage() {
   const setStatus = useMutation({
     mutationFn: async (status: Status) => {
       const { data: userData } = await supabase.auth.getUser();
-      const update: Record<string, unknown> = { status };
-      if (status === "accepted" || status === "in_progress") update['assigned_vet_id'] = userData.user?.id ?? null;
-      const { error } = await supabase.from("cases").update(update).eq("id", active!.id);
+      const claim = status === "accepted" || status === "in_progress";
+      const { error } = await supabase
+        .from("cases")
+        .update(claim ? { status, assigned_vet_id: userData.user?.id ?? null } : { status })
+        .eq("id", active!.id);
       if (error) throw error;
     },
     onSuccess: () => {
