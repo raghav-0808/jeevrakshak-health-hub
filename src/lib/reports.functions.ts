@@ -65,7 +65,7 @@ async function createCase(data: ReportInputType, reporterId: string | null) {
         longitude: data.longitude ?? null,
         address: data.address ?? null,
         urgency: assessment?.urgency ?? null,
-        ai_assessment: assessment,
+        ai_assessment: assessment ? JSON.parse(JSON.stringify(assessment)) : null,
       })
       .select("id")
       .single();
