@@ -93,16 +93,19 @@ function Dashboard() {
 }
 
 const ownerSections = [
+  { title: "Farmer Portal", body: "Your overview: animals, vaccinations due and active requests.", to: "/portal" },
   { title: "My Animals", body: "Add each animal with a photo, breed, age and health notes.", to: "/animals" },
-  { title: "Vaccinations & Records", body: "Vaccines given, next due dates and past treatments per animal.", to: "/animals" },
+  { title: "Vaccinations & Records", body: "Vaccines given, next due dates and past treatments.", to: "/records" },
   { title: "AI Health Assistant", body: "Describe symptoms and share a photo for a preliminary read.", to: "/assistant" },
   { title: "Emergency Assistance", body: "Request a veterinarian and follow the case status live.", to: "/requests" },
   { title: "Previous Requests", body: "Everything you have reported, with its current status.", to: "/requests" },
 ];
 
 const vetSections = [
+  { title: "Doctor Portal", body: "Incoming cases, priorities and your active caseload.", to: "/vet-portal" },
   { title: "Incoming Cases", body: "New animal reports arriving from owners and the public.", to: "/cases" },
   { title: "Case Details", body: "Photos, symptoms, description and location for each report.", to: "/cases" },
   { title: "Status Updates", body: "Accept, decline, and move a case through to resolved.", to: "/cases" },
   { title: "Clinical Notes", body: "Record treatment given and recommendations for the owner.", to: "/cases" },
 ];
+
