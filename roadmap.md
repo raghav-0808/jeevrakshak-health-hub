@@ -14,7 +14,14 @@
 - [x] Vet case queue, filters, status updates, clinical notes
 - [x] Real multimodal AI assessment (photo + text), verified live
 
+## Phase 3 — portals
+- [x] Sign-in works immediately after sign up (no email confirmation wait)
+- [x] Farmer portal overview page with metrics, vaccinations due, recent requests
+- [x] Doctor portal overview page with incoming, high priority and own caseload
+- [x] Combined health records page across all animals
+
 ## Next
+
 - [ ] Notifications when a vet accepts or updates a case
 - [ ] Vet profile details (clinic, registration number, service area)
 - [ ] Nearby-vet matching by location

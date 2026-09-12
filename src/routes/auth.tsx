@@ -74,7 +74,7 @@ function AuthPage() {
         });
         if (signUpError) throw signUpError;
         if (!data.session) {
-          setNotice("Account created. Check your email to confirm it, then sign in.");
+          setNotice("Account created. Please sign in to continue.");
           setMode("signin");
           return;
         }
